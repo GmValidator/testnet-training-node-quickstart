@@ -2,7 +2,7 @@ import os
 from dataclasses import dataclass
 
 import torch
-from peft import LoraConfig
+from peft import LoraConfig, get_peft_model, TaskType
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer
 
 from dataset import SFTDataCollator, SFTDataset
@@ -33,13 +33,9 @@ def train_lora(
     assert model_id in model2template, f"model_id {model_id} not supported"
     lora_config = LoraConfig(
         r=training_args.lora_rank,
-        target_modules=[
-            "q_proj",
-            "v_proj",
-        ],
         lora_alpha=training_args.lora_alpha,
         lora_dropout=training_args.lora_dropout,
-        task_type="CAUSAL_LM",
+        task_type=TaskType.CAUSAL_LM,
     )
 
     # Load model in 4-bit to do qLoRA
@@ -48,6 +44,16 @@ def train_lora(
         bnb_4bit_quant_type="nf4",
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        quantization_config=bnb_config,
+        device_map={"": 0},
+        token=os.environ["HF_TOKEN"],
+    )
+
+    # Apply LoRA adapter
+    model = get_peft_model(model, lora_config)
 
     training_args_dict = {
         "per_device_train_batch_size": training_args.per_device_train_batch_size,
@@ -74,12 +80,6 @@ def train_lora(
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
         use_fast=True,
-    )
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id,
-        quantization_config=bnb_config,
-        device_map={"": 0},
-        token=os.environ["HF_TOKEN"],
     )
 
     # Load dataset
