@@ -1,14 +1,14 @@
 Qwen/Qwen1.5-0.5B:
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 4
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 1.5e-4
+  learning_rate: 3e-5
   lora_rank: 8
   lora_alpha: 16
-  lora_dropout: 0.1
+  lora_dropout: 0.2
   gradient_checkpointing: true
-  warmup_steps: 250
-  weight_decay: 0.01
+  warmup_steps: 500
+  weight_decay: 0.05
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
@@ -18,15 +18,15 @@ Qwen/Qwen1.5-0.5B:
 
 Qwen/Qwen1.5-1.8B:
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 4
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 1.5e-4
+  learning_rate: 3e-5
   lora_rank: 4
   lora_alpha: 8
-  lora_dropout: 0.1
+  lora_dropout: 0.2
   gradient_checkpointing: true
-  warmup_steps: 250
-  weight_decay: 0.01
+  warmup_steps: 500
+  weight_decay: 0.05
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
@@ -36,15 +36,15 @@ Qwen/Qwen1.5-1.8B:
 
 Qwen/Qwen1.5-7B:
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 4
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 1.5e-4
+  learning_rate: 3e-5
   lora_rank: 4
   lora_alpha: 8
-  lora_dropout: 0.1
+  lora_dropout: 0.2
   gradient_checkpointing: true
-  warmup_steps: 250
-  weight_decay: 0.01
+  warmup_steps: 500
+  weight_decay: 0.05
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
@@ -54,15 +54,15 @@ Qwen/Qwen1.5-7B:
 
 google/gemma-2b:
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 4
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 1.5e-4
+  learning_rate: 3e-5
   lora_rank: 4
   lora_alpha: 8
-  lora_dropout: 0.1
+  lora_dropout: 0.2
   gradient_checkpointing: true
-  warmup_steps: 250
-  weight_decay: 0.01
+  warmup_steps: 500
+  weight_decay: 0.05
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
@@ -72,15 +72,15 @@ google/gemma-2b:
 
 google/gemma-7b:
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 4
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 1.5e-4
+  learning_rate: 3e-5
   lora_rank: 4
   lora_alpha: 8
-  lora_dropout: 0.1
+  lora_dropout: 0.2
   gradient_checkpointing: true
-  warmup_steps: 250
-  weight_decay: 0.01
+  warmup_steps: 500
+  weight_decay: 0.05
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
