@@ -59,7 +59,7 @@ def train_lora(
         "per_device_train_batch_size": training_args.per_device_train_batch_size,
         "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
         "warmup_steps": training_args.warmup_steps,
-        "learning_rate": training_args.learning_rate,
+        "learning_rate": float(training_args.learning_rate),  # Ensure learning_rate is a float
         "bf16": True,
         "logging_steps": 20,
         "output_dir": "outputs",
