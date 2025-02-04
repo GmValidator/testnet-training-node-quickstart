@@ -17,8 +17,9 @@ class LoraTrainingArguments:
     lora_rank: int
     lora_alpha: int
     lora_dropout: int
-    learning_rate: float  # Add learning rate
-    warmup_steps: int  # Add warmup steps
+    learning_rate: float
+    warmup_steps: int
+    gradient_checkpointing: bool  # Add gradient_checkpointing
 
 def train_lora(
     model_id: str, context_length: int, training_args: LoraTrainingArguments
@@ -45,8 +46,8 @@ def train_lora(
     training_args = SFTConfig(
         per_device_train_batch_size=training_args.per_device_train_batch_size,
         gradient_accumulation_steps=training_args.gradient_accumulation_steps,
-        warmup_steps=training_args.warmup_steps,  # Use warmup steps from arguments
-        learning_rate=training_args.learning_rate,  # Use learning rate from arguments
+        warmup_steps=training_args.warmup_steps,
+        learning_rate=training_args.learning_rate,
         bf16=True,
         logging_steps=20,
         output_dir="outputs",
@@ -54,6 +55,7 @@ def train_lora(
         remove_unused_columns=False,
         num_train_epochs=training_args.num_train_epochs,
         max_seq_length=context_length,
+        gradient_checkpointing=training_args.gradient_checkpointing,  # Use gradient_checkpointing
     )
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
@@ -104,8 +106,9 @@ if __name__ == "__main__":
         lora_rank=8,
         lora_alpha=16,
         lora_dropout=0.05,
-        learning_rate=3e-5,  # Add learning rate
-        warmup_steps=500,  # Add warmup steps
+        learning_rate=3e-5,
+        warmup_steps=500,
+        gradient_checkpointing=True,  # Add gradient_checkpointing
     )
 
     # Set model ID and context length
