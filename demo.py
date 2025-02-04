@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import torch
 from peft import LoraConfig, get_peft_model, TaskType
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer
+from sklearn.model_selection import train_test_split
 
 from dataset import SFTDataCollator, SFTDataset
 from utils.constants import model2template
@@ -96,9 +97,9 @@ def train_lora(
     )
 
     # Split dataset into train and eval
-    train_test_split = dataset.train_test_split(test_size=0.1)
-    train_dataset = train_test_split["train"]
-    eval_dataset = train_test_split["test"]
+    train_size = int(0.9 * len(dataset))
+    eval_size = len(dataset) - train_size
+    train_dataset, eval_dataset = torch.utils.data.random_split(dataset, [train_size, eval_size])
 
     # Define trainer
     trainer = Trainer(
