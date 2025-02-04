@@ -3,8 +3,7 @@ from dataclasses import dataclass
 
 import torch
 from peft import LoraConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-from trl import SFTTrainer, SFTConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer
 
 from dataset import SFTDataCollator, SFTDataset
 from utils.constants import model2template
@@ -20,13 +19,13 @@ class LoraTrainingArguments:
     learning_rate: float
     warmup_steps: int
     gradient_checkpointing: bool
-    weight_decay: float  # Add weight_decay
-    save_strategy: str  # Add save_strategy
-    evaluation_strategy: str  # Add evaluation_strategy
-    load_best_model_at_end: bool  # Add load_best_model_at_end
-    metric_for_best_model: str  # Add metric_for_best_model
-    greater_is_better: bool  # Add greater_is_better
-    early_stopping_patience: int  # Add early_stopping_patience
+    weight_decay: float
+    save_strategy: str
+    evaluation_strategy: str
+    load_best_model_at_end: bool
+    metric_for_best_model: str
+    greater_is_better: bool
+    early_stopping_patience: int
 
 def train_lora(
     model_id: str, context_length: int, training_args: LoraTrainingArguments
@@ -50,7 +49,7 @@ def train_lora(
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
-    training_args = SFTConfig(
+    training_args = TrainingArguments(
         per_device_train_batch_size=training_args.per_device_train_batch_size,
         gradient_accumulation_steps=training_args.gradient_accumulation_steps,
         warmup_steps=training_args.warmup_steps,
@@ -63,13 +62,13 @@ def train_lora(
         num_train_epochs=training_args.num_train_epochs,
         max_seq_length=context_length,
         gradient_checkpointing=training_args.gradient_checkpointing,
-        weight_decay=training_args.weight_decay,  # Use weight_decay
-        save_strategy=training_args.save_strategy,  # Use save_strategy
-        evaluation_strategy=training_args.evaluation_strategy,  # Use evaluation_strategy
-        load_best_model_at_end=training_args.load_best_model_at_end,  # Use load_best_model_at_end
-        metric_for_best_model=training_args.metric_for_best_model,  # Use metric_for_best_model
-        greater_is_better=training_args.greater_is_better,  # Use greater_is_better
-        early_stopping_patience=training_args.early_stopping_patience,  # Use early_stopping_patience
+        weight_decay=training_args.weight_decay,
+        save_strategy=training_args.save_strategy,
+        evaluation_strategy=training_args.evaluation_strategy,
+        load_best_model_at_end=training_args.load_best_model_at_end,
+        metric_for_best_model=training_args.metric_for_best_model,
+        greater_is_better=training_args.greater_is_better,
+        early_stopping_patience=training_args.early_stopping_patience,
     )
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
@@ -91,11 +90,10 @@ def train_lora(
     )
 
     # Define trainer
-    trainer = SFTTrainer(
+    trainer = Trainer(
         model=model,
         train_dataset=dataset,
         args=training_args,
-        peft_config=lora_config,
         data_collator=SFTDataCollator(tokenizer, max_seq_length=context_length),
     )
 
@@ -123,13 +121,13 @@ if __name__ == "__main__":
         learning_rate=3e-5,
         warmup_steps=500,
         gradient_checkpointing=True,
-        weight_decay=0.01,  # Add weight_decay
-        save_strategy="epoch",  # Add save_strategy
-        evaluation_strategy="epoch",  # Add evaluation_strategy
-        load_best_model_at_end=True,  # Add load_best_model_at_end
-        metric_for_best_model="eval_loss",  # Add metric_for_best_model
-        greater_is_better=False,  # Add greater_is_better
-        early_stopping_patience=2,  # Add early_stopping_patience
+        weight_decay=0.01,
+        save_strategy="epoch",
+        evaluation_strategy="epoch",
+        load_best_model_at_end=True,
+        metric_for_best_model="eval_loss",
+        greater_is_better=False,
+        early_stopping_patience=2,
     )
 
     # Set model ID and context length
