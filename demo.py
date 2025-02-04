@@ -60,7 +60,6 @@ def train_lora(
         optim="paged_adamw_8bit",
         remove_unused_columns=False,
         num_train_epochs=training_args.num_train_epochs,
-        max_seq_length=context_length,
         gradient_checkpointing=training_args.gradient_checkpointing,
         weight_decay=training_args.weight_decay,
         save_strategy=training_args.save_strategy,
