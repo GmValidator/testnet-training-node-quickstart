@@ -9,7 +9,6 @@ from trl import SFTTrainer, SFTConfig
 from dataset import SFTDataCollator, SFTDataset
 from utils.constants import model2template
 
-
 @dataclass
 class LoraTrainingArguments:
     per_device_train_batch_size: int
@@ -18,7 +17,8 @@ class LoraTrainingArguments:
     lora_rank: int
     lora_alpha: int
     lora_dropout: int
-
+    learning_rate: float  # Add learning rate
+    warmup_steps: int  # Add warmup steps
 
 def train_lora(
     model_id: str, context_length: int, training_args: LoraTrainingArguments
@@ -45,8 +45,8 @@ def train_lora(
     training_args = SFTConfig(
         per_device_train_batch_size=training_args.per_device_train_batch_size,
         gradient_accumulation_steps=training_args.gradient_accumulation_steps,
-        warmup_steps=100,
-        learning_rate=2e-4,
+        warmup_steps=training_args.warmup_steps,  # Use warmup steps from arguments
+        learning_rate=training_args.learning_rate,  # Use learning rate from arguments
         bf16=True,
         logging_steps=20,
         output_dir="outputs",
@@ -95,7 +95,6 @@ def train_lora(
     # upload lora weights and tokenizer
     print("Training Completed.")
 
-
 if __name__ == "__main__":
     # Define training arguments for LoRA fine-tuning
     training_args = LoraTrainingArguments(
@@ -105,6 +104,8 @@ if __name__ == "__main__":
         lora_rank=8,
         lora_alpha=16,
         lora_dropout=0.05,
+        learning_rate=3e-5,  # Add learning rate
+        warmup_steps=500,  # Add warmup steps
     )
 
     # Set model ID and context length
