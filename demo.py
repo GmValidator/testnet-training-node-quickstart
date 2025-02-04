@@ -15,7 +15,7 @@ class LoraTrainingArguments:
     num_train_epochs: int
     lora_rank: int
     lora_alpha: int
-    lora_dropout: int
+    lora_dropout: float
     learning_rate: float
     warmup_steps: int
     gradient_checkpointing: bool
@@ -49,26 +49,28 @@ def train_lora(
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
 
-    training_args = TrainingArguments(
-        per_device_train_batch_size=training_args.per_device_train_batch_size,
-        gradient_accumulation_steps=training_args.gradient_accumulation_steps,
-        warmup_steps=training_args.warmup_steps,
-        learning_rate=training_args.learning_rate,
-        bf16=True,
-        logging_steps=20,
-        output_dir="outputs",
-        optim="paged_adamw_8bit",
-        remove_unused_columns=False,
-        num_train_epochs=training_args.num_train_epochs,
-        gradient_checkpointing=training_args.gradient_checkpointing,
-        weight_decay=training_args.weight_decay,
-        save_strategy=training_args.save_strategy,
-        evaluation_strategy=training_args.evaluation_strategy,
-        load_best_model_at_end=training_args.load_best_model_at_end,
-        metric_for_best_model=training_args.metric_for_best_model,
-        greater_is_better=training_args.greater_is_better,
-        early_stopping_patience=training_args.early_stopping_patience,
-    )
+    training_args_dict = {
+        "per_device_train_batch_size": training_args.per_device_train_batch_size,
+        "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+        "warmup_steps": training_args.warmup_steps,
+        "learning_rate": training_args.learning_rate,
+        "bf16": True,
+        "logging_steps": 20,
+        "output_dir": "outputs",
+        "optim": "paged_adamw_8bit",
+        "remove_unused_columns": False,
+        "num_train_epochs": training_args.num_train_epochs,
+        "gradient_checkpointing": training_args.gradient_checkpointing,
+        "weight_decay": training_args.weight_decay,
+        "save_strategy": training_args.save_strategy,
+        "evaluation_strategy": training_args.evaluation_strategy,
+        "load_best_model_at_end": training_args.load_best_model_at_end,
+        "metric_for_best_model": training_args.metric_for_best_model,
+        "greater_is_better": training_args.greater_is_better,
+    }
+
+    training_args = TrainingArguments(**training_args_dict)
+
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
         use_fast=True,
