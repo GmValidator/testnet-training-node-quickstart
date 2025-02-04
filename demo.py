@@ -131,7 +131,7 @@ if __name__ == "__main__":
         lora_rank=8,
         lora_alpha=16,
         lora_dropout=0.05,
-        learning_rate=3e-5,
+        learning_rate=2e-4,
         warmup_steps=500,
         gradient_checkpointing=True,
         weight_decay=0.01,
