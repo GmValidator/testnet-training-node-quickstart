@@ -57,7 +57,8 @@ def train_lora(
 
     # Ensure all parameters require gradients
     for name, param in model.named_parameters():
-        param.requires_grad = True
+        if param.dtype in [torch.float16, torch.float32, torch.float64, torch.bfloat16]:
+            param.requires_grad = True
 
     training_args_dict = {
         "per_device_train_batch_size": training_args.per_device_train_batch_size,
