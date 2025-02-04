@@ -95,10 +95,16 @@ def train_lora(
         template=model2template[model_id],
     )
 
+    # Split dataset into train and eval
+    train_test_split = dataset.train_test_split(test_size=0.1)
+    train_dataset = train_test_split["train"]
+    eval_dataset = train_test_split["test"]
+
     # Define trainer
     trainer = Trainer(
         model=model,
-        train_dataset=dataset,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,  # Add eval_dataset
         args=training_args,
         data_collator=SFTDataCollator(tokenizer, max_seq_length=context_length),
     )
