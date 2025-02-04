@@ -44,6 +44,8 @@ if __name__ == "__main__":
         logger.info(f"Start to train the model {model_id}...")
         # if OOM, proceed to the next model
         try:
+            # Update the evaluation_strategy to eval_strategy in the YAML file
+            all_training_args[model_id]['eval_strategy'] = all_training_args[model_id].pop('evaluation_strategy')
             train_lora(
                 model_id=model_id,
                 context_length=context_length,
