@@ -21,7 +21,7 @@ class LoraTrainingArguments:
     gradient_checkpointing: bool
     weight_decay: float
     save_strategy: str
-    evaluation_strategy: str
+    eval_strategy: str  # Change evaluation_strategy to eval_strategy
     load_best_model_at_end: bool
     metric_for_best_model: str
     greater_is_better: bool
@@ -55,6 +55,10 @@ def train_lora(
     # Apply LoRA adapter
     model = get_peft_model(model, lora_config)
 
+    # Ensure all parameters require gradients
+    for name, param in model.named_parameters():
+        param.requires_grad = True
+
     training_args_dict = {
         "per_device_train_batch_size": training_args.per_device_train_batch_size,
         "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
@@ -69,7 +73,7 @@ def train_lora(
         "gradient_checkpointing": training_args.gradient_checkpointing,
         "weight_decay": training_args.weight_decay,
         "save_strategy": training_args.save_strategy,
-        "evaluation_strategy": training_args.evaluation_strategy,
+        "eval_strategy": training_args.eval_strategy,  # Change evaluation_strategy to eval_strategy
         "load_best_model_at_end": training_args.load_best_model_at_end,
         "metric_for_best_model": training_args.metric_for_best_model,
         "greater_is_better": training_args.greater_is_better,
@@ -124,7 +128,7 @@ if __name__ == "__main__":
         gradient_checkpointing=True,
         weight_decay=0.01,
         save_strategy="epoch",
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",  # Change evaluation_strategy to eval_strategy
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
         greater_is_better=False,
