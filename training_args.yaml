@@ -1,84 +1,48 @@
 Qwen/Qwen1.5-0.5B:
-  per_device_train_batch_size: 16
-  gradient_accumulation_steps: 2
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 4
   num_train_epochs: 3
   learning_rate: 3e-5
   lora_rank: 8
   lora_alpha: 16
   lora_dropout: 0.1
-  gradient_checkpointing: false
-  warmup_steps: 300
+  gradient_checkpointing: true
+  warmup_steps: 500
   weight_decay: 0.01
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
   metric_for_best_model: "eval_loss"
   greater_is_better: false
-  early_stopping_patience: 3
+  early_stopping_patience: 2
 
 Qwen/Qwen1.5-1.8B:
-  per_device_train_batch_size: 16
-  gradient_accumulation_steps: 2
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 4
   num_train_epochs: 3
   learning_rate: 3e-5
-  lora_rank: 8
-  lora_alpha: 16
+  lora_rank: 4
+  lora_alpha: 8
   lora_dropout: 0.1
-  gradient_checkpointing: false
-  warmup_steps: 300
+  gradient_checkpointing: true
+  warmup_steps: 500
   weight_decay: 0.01
   save_strategy: "epoch"
   evaluation_strategy: "epoch"
   load_best_model_at_end: true
   metric_for_best_model: "eval_loss"
   greater_is_better: false
-  early_stopping_patience: 3
+  early_stopping_patience: 2
 
 Qwen/Qwen1.5-7B:
-  per_device_train_batch_size: 8
-  gradient_accumulation_steps: 4
-  num_train_epochs: 3
-  learning_rate: 5e-6
-  lora_rank: 8
-  lora_alpha: 16
-  lora_dropout: 0.1
-  gradient_checkpointing: false
-  warmup_steps: 500
-  weight_decay: 0.01
-  save_strategy: "epoch"
-  evaluation_strategy: "epoch"
-  load_best_model_at_end: true
-  metric_for_best_model: "eval_loss"
-  greater_is_better: false
-  early_stopping_patience: 3
-
-google/gemma-2b:
-  per_device_train_batch_size: 16
-  gradient_accumulation_steps: 2
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
   num_train_epochs: 3
   learning_rate: 3e-5
-  lora_rank: 8
-  lora_alpha: 16
+  lora_rank: 4
+  lora_alpha: 8
   lora_dropout: 0.1
-  gradient_checkpointing: false
-  warmup_steps: 300
-  weight_decay: 0.01
-  save_strategy: "epoch"
-  evaluation_strategy: "epoch"
-  load_best_model_at_end: true
-  metric_for_best_model: "eval_loss"
-  greater_is_better: false
-  early_stopping_patience: 3
-
-google/gemma-7b:
-  per_device_train_batch_size: 8
-  gradient_accumulation_steps: 4
-  num_train_epochs: 3
-  learning_rate: 5e-6
-  lora_rank: 8
-  lora_alpha: 16
-  lora_dropout: 0.1
-  gradient_checkpointing: false
+  gradient_checkpointing: true
   warmup_steps: 500
   weight_decay: 0.01
   save_strategy: "epoch"
@@ -86,4 +50,40 @@ google/gemma-7b:
   load_best_model_at_end: true
   metric_for_best_model: "eval_loss"
   greater_is_better: false
-  early_stopping_patience: 3
+  early_stopping_patience: 2
+
+google/gemma-2b:
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 4
+  num_train_epochs: 3
+  learning_rate: 3e-5
+  lora_rank: 4
+  lora_alpha: 8
+  lora_dropout: 0.1
+  gradient_checkpointing: true
+  warmup_steps: 500
+  weight_decay: 0.01
+  save_strategy: "epoch"
+  evaluation_strategy: "epoch"
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  early_stopping_patience: 2
+
+google/gemma-7b:
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  num_train_epochs: 3
+  learning_rate: 3e-5
+  lora_rank: 4
+  lora_alpha: 8
+  lora_dropout: 0.1
+  gradient_checkpointing: true
+  warmup_steps: 500
+  weight_decay: 0.01
+  save_strategy: "epoch"
+  evaluation_strategy: "epoch"
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  early_stopping_patience: 2
