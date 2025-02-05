@@ -79,6 +79,9 @@ def train_lora(
         "load_best_model_at_end": training_args.load_best_model_at_end,
         "metric_for_best_model": training_args.metric_for_best_model,
         "greater_is_better": training_args.greater_is_better,
+        "evaluation_strategy": "epoch",
+        "save_total_limit": 2,
+        "early_stopping_patience": training_args.early_stopping_patience,
     }
 
     training_args = TrainingArguments(**training_args_dict)
@@ -125,14 +128,14 @@ def train_lora(
 if __name__ == "__main__":
     # Define training arguments for LoRA fine-tuning
     training_args = LoraTrainingArguments(
-        num_train_epochs=3,
-        per_device_train_batch_size=2,
-        gradient_accumulation_steps=2,
+        num_train_epochs=20,
+        per_device_train_batch_size=1,
+        gradient_accumulation_steps=4,
         lora_rank=8,
         lora_alpha=16,
-        lora_dropout=0.05,
-        learning_rate=2e-4,
-        warmup_steps=500,
+        lora_dropout=0.1,
+        learning_rate=1.5e-4,
+        warmup_steps=250,
         gradient_checkpointing=True,
         weight_decay=0.01,
         save_strategy="epoch",
